@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldCroup from '../common/TextFieldGroup';
+import TextAreaFieldCroup from '../common/TextAreaFiedGroup';
+import InputCroup from '../common/InputGroup';
+import SelectListCroup from '../common/SelectListGroup';
 
 class CreateProfile extends Component {
 	constructor(props) {
@@ -55,6 +58,5 @@ const mapStateToProps = state => ({
 		errors: state.errors,
 	}
 );
-
 
 export default connect(mapStateToProps)(CreateProfile);
