@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { withRouter } from 'react-router-dom';
 import TextFieldCroup from '../common/TextFieldGroup';
 import SelectListCroup from '../common/SelectListGroup';
 import TextAreaFieldCroup from '../common/TextAreaFiedGroup';
 import InputCroup from '../common/InputGroup';
+import { createProfile } from '../../actions/profileActions';
 
 class CreateProfile extends Component {
 	constructor(props) {
@@ -33,9 +35,32 @@ class CreateProfile extends Component {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
+	componentWillReceiveProps(nextProps){
+		if(nextProps.errors) {
+			this.setState({errors: nextProps.errors})
+		}
+	}
+
 	onSubmit(e) {
 		e.preventDefault();
-		console.log('submit');
+
+		const profileData = {
+			handle: this.state.handle,
+			company: this.state.company,
+			website: this.state.website,
+			location: this.state.location,
+			status: this.state.status,
+			skills: this.state.skills,
+			githubusername: this.state.githubusername,
+			bio: this.state.bio,
+			twitter: this.state.twitter,
+			facebook: this.state.facebook,
+			linkedin: this.state.linkedin,
+			youtube: this.state.youtube,
+			instagram: this.state.instagram
+		};
+
+		this.props.createProfile(profileData, this.props.history);
 	}
 
 	onChange(e) {
@@ -54,7 +79,7 @@ class CreateProfile extends Component {
 						name='twitter'
 						icon='fab fa-twitter'
 						value={this.state.twitter}
-						onChange={this.state.onChange}
+						onChange={this.onChange}
 						error={errors.twitter}
 					/>
 
@@ -63,7 +88,7 @@ class CreateProfile extends Component {
 						name='facebook'
 						icon='fab fa-facebook'
 						value={this.state.facebook}
-						onChange={this.state.onChange}
+						onChange={this.onChange}
 						error={errors.facebook}
 					/>
 
@@ -72,7 +97,7 @@ class CreateProfile extends Component {
 						name='linkedin'
 						icon='fab fa-linkedin'
 						value={this.state.linkedin}
-						onChange={this.state.onChange}
+						onChange={this.onChange}
 						error={errors.linkedin}
 					/>
 
@@ -81,7 +106,7 @@ class CreateProfile extends Component {
 						name='youtube'
 						icon='fab fa-youtube'
 						value={this.state.youtube}
-						onChange={this.state.onChange}
+						onChange={this.onChange}
 						error={errors.youtube}
 					/>
 
@@ -90,7 +115,7 @@ class CreateProfile extends Component {
 						name='instagram'
 						icon='fab fa-youtube'
 						value={this.state.instagram}
-						onChange={this.state.onChange}
+						onChange={this.onChange}
 						error={errors.instagram}
 					/>
 				</div>
@@ -195,11 +220,13 @@ class CreateProfile extends Component {
 								/>
 
 								<div className="mb-3">
-									<button onClick={() => {
-										this.setState(prevState => ({
-											displaySocialInputs: !prevState.displaySocialInputs
-										}))
-									}} className="btn btn-light">
+									<button
+										type='button'
+										onClick={() => {
+											this.setState(prevState => ({
+												displaySocialInputs: !prevState.displaySocialInputs
+											}))
+										}} className="btn btn-light">
 										Add Social Network links
 									</button>
 									<span className='text-muted'>Optional</span>
@@ -227,4 +254,4 @@ const mapStateToProps = state => ({
 	}
 );
 
-export default connect(mapStateToProps)(CreateProfile);
+export default connect(mapStateToProps, {createProfile})(withRouter(CreateProfile));
