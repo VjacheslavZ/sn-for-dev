@@ -5,12 +5,12 @@ import {
 	PROFILE_LOADING,
 	CLEAR_CURRENT_PROFILE,
 	GET_ERRORS,
-	SET_CUREENT_USER } from './types';
+	SET_CUREENT_USER
+} from './types';
 
 //GET current profile
 export const getCurrentProfile = () => dispatch => {
 	dispatch(setProfileLoading());
-
 	axios
 		.get('/api/profile')
 		.then(res => dispatch({
@@ -20,6 +20,21 @@ export const getCurrentProfile = () => dispatch => {
 		.catch(err => dispatch({
 			type: GET_PROFILE,
 			payload: {}
+		}))
+};
+
+//Get profile by handle
+export const getProfileByHandle = (handle) => dispatch => {
+	dispatch(setProfileLoading());
+	axios
+		.get(`/api/profile/handle/${handle}`)
+		.then(res => dispatch({
+			type: GET_PROFILE,
+			payload: res.data
+		}))
+		.catch(err => dispatch({
+			type: GET_PROFILE,
+			payload: null
 		}))
 };
 
