@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-
+import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import TextFieldCroup from '../common/TextFieldGroup';
 import SelectListCroup from '../common/SelectListGroup';
 import TextAreaFieldCroup from '../common/TextAreaFiedGroup';
@@ -179,7 +180,9 @@ class CreateProfile extends Component {
 					<div className="row">
 						<div className="col-md-8 m-auto">
 							<h1 className="display-4 text-center">Edit profile</h1>
-
+							<Link to='/dashboard' className='btn btn-light'>
+								Go back
+							</Link>
 							<small className="d-block pb-3">* = required fields</small>
 
 							<form onSubmit={this.onSubmit}>
