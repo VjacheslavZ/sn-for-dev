@@ -6,7 +6,7 @@ import ProfileHeader from './ProfileHeader';
 import ProfileAbout from './ProfileAbout';
 import ProfileCreds from './ProfileCreds';
 import ProfileGitHub from './ProfileGitHub';
-import Spiiner from '../common/Spiiner';
+import Spinner from '../common/Spiiner';
 import PropTypes from 'prop-types';
 
 class Profile extends Component {
@@ -17,12 +17,40 @@ class Profile extends Component {
 	}
 
 	render() {
+		const { profile, loading } = this.props.profile;
+		let profileContent;
+
+		if(profile === null || loading) {
+			profileContent = <Spinner/>
+		} else {
+			profileContent = (
+				<div>
+					<div className="row">
+						<div className="col-md-6">
+							<Link to='/profiles' className='btn btn-light mb-3 float-left'>
+								Bak to profiles
+							</Link>
+						</div>
+						<div className="col-md-6" />
+					</div>
+
+					<ProfileHeader profile={profile}/>
+					<ProfileAbout profile={profile}/>
+					<ProfileCreds education={profile.education} experience={profile.experience}/>
+					<ProfileGitHub />
+				</div>
+			)
+		}
+
 		return (
-			<div>
-				<ProfileHeader />
-				<ProfileAbout />
-				<ProfileCreds />
-				<ProfileGitHub />
+			<div className='profile'>
+				<div className="container">
+					<div className="row">
+						<div className="col-md-12">
+							{profileContent}
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}
