@@ -1,11 +1,18 @@
 import axios from 'axios';
-import { GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE, GET_ERRORS, SET_CUREENT_USER } from './types';
+import {
+	GET_PROFILE,
+	GET_PROFILES,
+	PROFILE_LOADING,
+	CLEAR_CURRENT_PROFILE,
+	GET_ERRORS,
+	SET_CUREENT_USER } from './types';
 
 //GET current profile
 export const getCurrentProfile = () => dispatch => {
 	dispatch(setProfileLoading());
 
-	axios.get('/api/profile')
+	axios
+		.get('/api/profile')
 		.then(res => dispatch({
 			type: GET_PROFILE,
 			payload: res.data
@@ -18,7 +25,8 @@ export const getCurrentProfile = () => dispatch => {
 
 //Create profile
 export const createProfile = (profileDate, history) => dispatch => {
-	axios.post('/api/profile', profileDate)
+	axios
+		.post('/api/profile', profileDate)
 		.then(res => history.push('/dashboard'))
 		.catch(err =>
 			dispatch({
@@ -30,7 +38,8 @@ export const createProfile = (profileDate, history) => dispatch => {
 
 //Add experience
 export const addExperience = (expData, history) => dispatch => {
-	axios.post('/api/profile/experience', expData)
+	axios
+		.post('/api/profile/experience', expData)
 		.then(res => history.push('/dashboard'))
 		.catch(err => dispatch({
 			type: GET_ERRORS,
@@ -72,7 +81,8 @@ export const deleteEducation = (id) => dispatch => {
 
 //Add education
 export const addEducation= (eduData, history) => dispatch => {
-	axios.post('/api/profile/education', eduData)
+	axios
+		.post('/api/profile/education', eduData)
 		.then(res => history.push('/dashboard'))
 		.catch(err => dispatch({
 			type: GET_ERRORS,
@@ -80,10 +90,28 @@ export const addEducation= (eduData, history) => dispatch => {
 		}))
 };
 
+//Get all profiles getProfiles
+export const getProfiles = () => dispatch => {
+	dispatch(setProfileLoading());
+	axios
+		.get('/api/profile/all')
+		.then(res =>
+			dispatch({
+				type: GET_PROFILES,
+				payload: res.data
+			})
+		)
+		.catch(err => dispatch({
+			type: GET_PROFILES,
+			payload: null
+		}))
+};
+
 //Delete account & profile
 export const deleteAccount = () => dispatch => {
 	if(window.confirm('Are you sure? this can not be undone!')) {
-		axios.delete('/api/profile')
+		axios
+			.delete('/api/profile')
 			.then(res => dispatch({
 				type: SET_CUREENT_USER,
 				payload: {}
