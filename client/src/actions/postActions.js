@@ -11,6 +11,7 @@ import {
 
 //Add post
 export const addPost = postData => dispatch => {
+	dispatch(clearErrors());
 	axios
 		.post('/api/posts', postData)
 		.then(res => {
@@ -119,6 +120,25 @@ export const addComment = (postId, commentData)=> dispatch => {
 	dispatch(clearErrors());
 	axios
 		.post(`/api/posts/comment/${postId}`, commentData)
+		.then(res =>
+			dispatch({
+				type: GET_POST,
+				payload: res.data
+			})
+		)
+		.catch(err =>
+			dispatch({
+				type: GET_ERRORS,
+				payload: err.response.data
+			})
+		);
+};
+
+//Delete comment
+export const deleteComment = (postId, commentId)=> dispatch => {
+	dispatch(clearErrors());
+	axios
+		.delete(`/api/posts/comment/${postId}/${commentId}`)
 		.then(res =>
 			dispatch({
 				type: GET_POST,
