@@ -5,7 +5,7 @@ import {
 	PROFILE_LOADING,
 	CLEAR_CURRENT_PROFILE,
 	GET_ERRORS,
-	SET_CUREENT_USER
+	SET_CURRENT_USER
 } from './types';
 
 //GET current profile
@@ -128,7 +128,7 @@ export const deleteAccount = () => dispatch => {
 		axios
 			.delete('/api/profile')
 			.then(res => dispatch({
-				type: SET_CUREENT_USER,
+				type: SET_CURRENT_USER,
 				payload: {}
 			}))
 			.catch(err => dispatch({

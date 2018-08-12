@@ -2,7 +2,7 @@ import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwtDecode from 'jwt-decode';
 
-import {SET_CUREENT_USER, GET_ERRORS} from './types';
+import { SET_CURRENT_USER, GET_ERRORS } from './types';
 //Register User
 export const registerUser = (userData, history)=> dispatch => {
     axios.post('/api/users/register', userData)
@@ -41,7 +41,7 @@ export const loginUser = userData => dispatch => {
 //Set logged user
 export const setCurrentUser = (decoded) => {
 	return {
-		type: SET_CUREENT_USER,
+		type: SET_CURRENT_USER,
 		payload: decoded
 	}
 };
