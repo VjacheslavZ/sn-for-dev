@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import TextFieldCroup from '../common/TextFieldGroup';
 import SelectListCroup from '../common/SelectListGroup';
-import TextAreaFieldCroup from '../common/TextAreaFiedGroup';
+import TextAreaFieldCroup from '../common/TextAreaFieldGroup';
 import InputCroup from '../common/InputGroup';
 import { createProfile } from '../../actions/profileActions';
 
