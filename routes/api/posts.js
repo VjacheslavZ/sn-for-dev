@@ -62,21 +62,27 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 // @route DELETE api/posts/:id
 // @desc  Delete post
 // @access Private
-router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-	Profile.findOne({ user: req.user.id })
-		.then(profile => {
+router.delete(
+	'/:id',
+	passport.authenticate('jwt', { session: false }),
+	(req, res) => {
+		Profile.findOne({ user: req.user.id }).then(profile => {
 			Post.findById(req.params.id)
 				.then(post => {
-					//Check for post owner
-					if(post.user.toString() !== req.user.id) {
-						return res.status(401).json({ notauthorized: 'User not authorized' });
+					// Check for post owner
+					if (post.user.toString() !== req.user.id) {
+						return res
+							.status(401)
+							.json({ notauthorized: 'User not authorized' });
 					}
-					//Delete
-					post.remove().then(() => res.json({ success: true}))
+
+					// Delete
+					post.remove().then(() => res.json({ success: true }));
 				})
-				.catch(err => res.status(404).json({ postnotfound: 'No post found'}));
-		})
-});
+				.catch(err => res.status(404).json({ postnotfound: 'No post found' }));
+		});
+	}
+)
 
 // @route POST api/posts/like/:id
 // @desc  Like post
@@ -98,10 +104,13 @@ router.post('/like/:id', passport.authenticate('jwt', { session: false }), (req,
 		})
 });
 
-// @route POST api/posts/unlike/:id
+// @route POST api/posts/unLike/:id
 // @desc  Unlike post
 // @access Private
-router.post('/unlike/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post(
+	'/unlike/:id',
+	passport.authenticate('jwt', { session: false }),
+	(req, res) => {
 	Profile.findOne({ user: req.user.id })
 		.then(profile => {
 			Post.findById(req.params.id)
