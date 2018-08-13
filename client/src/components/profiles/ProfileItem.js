@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux';
 import isEmpty from '../../validation/is-empy';
 
 class ProfileItem extends Component {

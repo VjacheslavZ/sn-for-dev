@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import isEmpty from '../../validation/is-empy';
 
 
@@ -94,7 +93,5 @@ class ProfileHeader extends Component {
 		);
 	}
 }
-
-ProfileHeader.propTypes = {};
 
 export default ProfileHeader;
