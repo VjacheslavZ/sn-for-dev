@@ -2,6 +2,7 @@ import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwtDecode from 'jwt-decode';
 
+
 import { SET_CURRENT_USER, GET_ERRORS } from './types';
 //Register User
 export const registerUser = (userData, history)=> dispatch => {
@@ -28,7 +29,6 @@ export const loginUser = userData => dispatch => {
 			const decoded = jwtDecode(token);
 			//Set current user
 			dispatch(setCurrentUser(decoded))
-
 		})
 		.catch(err => {
             dispatch({

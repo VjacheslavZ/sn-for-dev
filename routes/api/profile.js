@@ -210,7 +210,6 @@ router.post('/education', passport.authenticate('jwt', { session: false}), (req,
 		})
 });
 
-
 //@Route   DELETE api/profile/experience/:exp_id
 //@desc    Delete experience from profile
 //@access  Private
@@ -259,7 +258,5 @@ router.delete('/', passport.authenticate('jwt', { session: false}), (req, res) =
 				.then(() => res.json({ success: true }))
 		})
 });
-
-
 
 module.exports = router;

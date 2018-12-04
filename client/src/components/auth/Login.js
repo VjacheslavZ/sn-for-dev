@@ -22,7 +22,7 @@ class Login extends Component {
 	onChange(e) {
 		this.setState({[e.target.name]: e.target.value})
 	};
-
+	//render after mount component
 	componentDidMount() {
 		if(this.props.auth.isAuthenticated) {
 			this.props.history.push('/dashboard');

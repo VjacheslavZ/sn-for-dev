@@ -46,7 +46,6 @@ class AddExperience extends Component {
 			current: this.state.current,
 			description: this.state.description,
 		};
-
 		this.props.addExperience(expData, this.props.history)
 	}
 
@@ -54,13 +53,12 @@ class AddExperience extends Component {
 		this.setState({ [e.target.name]: e.target.value })
 	}
 
-	onCheck(e) {
+	onCheck() {
 		this.setState({
 			disabled: !this.state.disabled,
 			current: !this.state.current
 		});
 	}
-
 
 	render() {
 		const { errors } = this.state;
@@ -94,24 +92,24 @@ class AddExperience extends Component {
 									error={errors.title}
 								/>
 
-								<TextFieldCroup
+{/*								<TextFieldCroup
 									placeholder='Location'
 									name='location'
 									value={this.state.location}
 									onChange={this.onChange}
 									error={errors.location}
-								/>
+								/>*/}
 
-								<h6>From date</h6>
+{/*								<h6>From date</h6>
 								<TextFieldCroup
 									type='date'
 									name='from'
 									value={this.state.from}
 									onChange={this.onChange}
 									error={errors.from}
-								/>
+								/>*/}
 
-								<h6>To date</h6>
+{/*								<h6>To date</h6>
 								<TextFieldCroup
 									type='date'
 									name='to'
@@ -119,9 +117,9 @@ class AddExperience extends Component {
 									onChange={this.onChange}
 									error={errors.to}
 									disabled={this.state.disabled ? 'disabled' : ''}
-								/>
+								/>*/}
 
-								<div className="for-check mb-4">
+{/*								<div className="for-check mb-4">
 									<input
 										type="checkbox"
 										className='form-check-input'
@@ -136,16 +134,16 @@ class AddExperience extends Component {
 										className='form-check-label'>
 										Current Job
 									</label>
-								</div>
+								</div>*/}
 
-								<TextAreaFieldCroup
+{/*								<TextAreaFieldCroup
 									placeholder='Job description'
 									name='description'
 									value={this.state.description}
 									onChange={this.onChange}
 									error={errors.description}
 									info="Tell us about the position"
-								/>
+								/>*/}
 
 								<input
 									type="submit"
