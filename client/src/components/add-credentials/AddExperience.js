@@ -3,6 +3,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { defaultMemoize, createSelectorCreator } from 'reselect';
+import { isEqual } from 'lodash';
+
 import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';
 import { addExperience } from '../../actions/profileActions';
@@ -92,24 +95,24 @@ class AddExperience extends Component {
 									error={errors.title}
 								/>
 
-{/*								<TextFieldCroup
+								<TextFieldCroup
 									placeholder='Location'
 									name='location'
 									value={this.state.location}
 									onChange={this.onChange}
 									error={errors.location}
-								/>*/}
+								/>
 
-{/*								<h6>From date</h6>
+								<h6>From date</h6>
 								<TextFieldCroup
 									type='date'
 									name='from'
 									value={this.state.from}
 									onChange={this.onChange}
 									error={errors.from}
-								/>*/}
+								/>
 
-{/*								<h6>To date</h6>
+								<h6>To date</h6>
 								<TextFieldCroup
 									type='date'
 									name='to'
@@ -117,9 +120,9 @@ class AddExperience extends Component {
 									onChange={this.onChange}
 									error={errors.to}
 									disabled={this.state.disabled ? 'disabled' : ''}
-								/>*/}
+								/>
 
-{/*								<div className="for-check mb-4">
+								<div className="for-check mb-4">
 									<input
 										type="checkbox"
 										className='form-check-input'
@@ -134,16 +137,16 @@ class AddExperience extends Component {
 										className='form-check-label'>
 										Current Job
 									</label>
-								</div>*/}
+								</div>
 
-{/*								<TextAreaFieldCroup
+								<TextAreaFieldCroup
 									placeholder='Job description'
 									name='description'
 									value={this.state.description}
 									onChange={this.onChange}
 									error={errors.description}
 									info="Tell us about the position"
-								/>*/}
+								/>
 
 								<input
 									type="submit"
@@ -165,11 +168,25 @@ AddExperience.propTypes = {
 	addExperience: PropTypes.func.isRequired,
 };
 
-const MapStateToProps = state => ({
-	profile: state.profile,
-	errors: state.errors,
-});
+const getErrors = (state) => state.errors;
 
-export default connect(MapStateToProps, { addExperience })(
+const createDeepEqualSelector = createSelectorCreator(
+	defaultMemoize,
+	isEqual
+);
+
+const getErrorsSelector = createDeepEqualSelector(
+	getErrors,
+	(errors) => errors
+);
+
+const mapStateToProps = state => {
+	return {
+		errors: getErrorsSelector(state)
+	}
+};
+
+
+export default connect(mapStateToProps, { addExperience })(
 	withRouter(AddExperience)
 );
