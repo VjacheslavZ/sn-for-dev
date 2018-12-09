@@ -8,6 +8,8 @@ import { isEqual } from 'lodash';
 
 import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';
+import  TextFieldCroupState from "../common/TextFieldGroupState";
+
 import { addExperience } from '../../actions/profileActions';
 
 class AddExperience extends Component {
@@ -39,15 +41,18 @@ class AddExperience extends Component {
 
 	onSubmit(e) {
 		e.preventDefault();
+		const {
+			to, from, title, company, current, location, description
+		} = e.target;
 
 		const expData = {
-			company: this.state.company,
-			title: this.state.title,
-			location: this.state.location,
-			from: this.state.from,
-			to: this.state.to,
-			current: this.state.current,
-			description: this.state.description,
+			to: to.value,
+			from: from.value,
+			title: title.value,
+			company: company.value,
+			current: current.value,
+			location: location.value,
+			description: description.value,
 		};
 		this.props.addExperience(expData, this.props.history)
 	}
@@ -71,44 +76,38 @@ class AddExperience extends Component {
 				<div className="container">
 					<div className="row">
 						<div className="col-md-8 m-auto">
-							<Link to='/dashboard' className='btn btn-light'>
-								Go back
-							</Link>
+							<Link to='/dashboard' className='btn btn-light'>Go back</Link>
+
 							<h1 className='display-4 text-center'>Add Experience</h1>
 							<p className='lead text-center'>Add any job or position that you have had in the past or current</p>
 							<small className="d-block pb-3">* = required fields</small>
 
 							<form onSubmit={this.onSubmit}>
-								<TextFieldCroup
+								<TextFieldCroupState
+									type='text'
 									placeholder='* Company'
 									name='company'
-									value={this.state.company}
-									onChange={this.onChange}
 									error={errors.company}
 								/>
 
-								<TextFieldCroup
+								<TextFieldCroupState
+									type='text'
 									placeholder='* Job title'
 									name='title'
-									value={this.state.title}
-									onChange={this.onChange}
 									error={errors.title}
 								/>
 
-								<TextFieldCroup
+								<TextFieldCroupState
+									type='text'
 									placeholder='Location'
 									name='location'
-									value={this.state.location}
-									onChange={this.onChange}
 									error={errors.location}
 								/>
 
 								<h6>From date</h6>
-								<TextFieldCroup
+								<TextFieldCroupState
 									type='date'
 									name='from'
-									value={this.state.from}
-									onChange={this.onChange}
 									error={errors.from}
 								/>
 
@@ -116,8 +115,6 @@ class AddExperience extends Component {
 								<TextFieldCroup
 									type='date'
 									name='to'
-									value={this.state.to}
-									onChange={this.onChange}
 									error={errors.to}
 									disabled={this.state.disabled ? 'disabled' : ''}
 								/>
