@@ -9,7 +9,13 @@
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "lint": "eslint --ext=js --ext=jsx .",
+    "lint:src": "eslint --ext=js --ext=jsx src",
+    "lint:server": "eslint --ext=js server",
+    "lint:fix": "eslint --ext=js --ext=jsx --fix .",
+    "lint:fix-src": "eslint --ext=js --ext=jsx --fix src",
+    "lint:fix-server": "eslint --ext=js --fix server"
   },
   "author": "Vjacheslav Z",
   "license": "ISC",
@@ -17,9 +23,15 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "concurrently": "^3.6.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.4",
     "express": "^4.16.3",
     "gravatar": "^1.6.0",
+    "husky": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
+    "lint": "^0.7.0",
+    "lint-staged": "^8.1.0",
     "mongoose": "^5.2.5",
     "npm": "^6.3.0",
     "passport": "^0.4.0",
@@ -27,6 +39,44 @@
     "validator": "^10.4.0"
   },
   "devDependencies": {
+    "@ljharb/eslint-config": "^13.1.1",
+    "@logux/eslint-config": "^29.1.1",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^5.16.0",
+    "eslint-config-postcss": "^3.0.7",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-es5": "^1.4.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.14.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prefer-let": "^1.0.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-standard": "^4.0.0",
     "nodemon": "^1.18.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "lint-staged": {
+    "**/*.js": [
+      "npm run lint:fix",
+      "npm run lint",
+      "git add"
+    ],
+    "**/*.jsx": [
+      "npm run lint:fix",
+      "npm run lint",
+      "git add"
+    ]
   }
 }
