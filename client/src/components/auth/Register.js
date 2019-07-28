@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {registerUser} from '../../actions/authActions';
+import { registerUser } from '../../actions/authActions';
 import TextFieldCroup from '../common/TextFieldGroup';
 
 class Register extends Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
 		this.state = {
 			name: '',
@@ -23,8 +23,15 @@ class Register extends Component {
 	}
 
 	componentDidMount() {
-		if(this.props.auth.isAuthenticated) {
-			this.props.history.push('/dashboard');
+		const { auth, history } = this.props;
+		if(auth.isAuthenticated) {
+			history.push('/dashboard');
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.errors) {
+			this.setState({errors: nextProps.errors})
 		}
 	}
 
@@ -34,25 +41,17 @@ class Register extends Component {
 
 	onSubmit(e) {
 		e.preventDefault();
+		const { name, email, password, password2 } = this.state;
+		const { history, registerUser: registerUserProp } = this.props;
+		const newUser = { name, email, password, password2 };
 
-		const newUser = {
-			name: this.state.name,
-			email: this.state.email,
-			password: this.state.password,
-			password2: this.state.password2,
-		};
-
-		this.props.registerUser(newUser, this.props.history)
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if(nextProps.errors) {
-			this.setState({errors: nextProps.errors})
-		}
+		registerUserProp(newUser, history)
 	}
 
 	render() {
-		const {errors} = this.state;
+		const { errors, name, email, password, password2 } = this.state;
+
+		console.log(this.props)
 
 		return (
 			<div>
@@ -68,7 +67,7 @@ class Register extends Component {
 									<TextFieldCroup
 										placeholder='Name'
 										name='name'
-										value={this.state.name}
+										value={name}
 										onChange={this.onChange}
 										error={errors.name}
 									/>
@@ -77,7 +76,7 @@ class Register extends Component {
 										placeholder='Email Address'
 										name='email'
 										type='email'
-										value={this.state.email}
+										value={email}
 										onChange={this.onChange}
 										error={errors.email}
 										info='This site uses Gravatar so if you want a profile image, use a Gravatar email'
@@ -87,7 +86,7 @@ class Register extends Component {
 										placeholder='Password'
 										name='password'
 										type='password'
-										value={this.state.password}
+										value={password}
 										onChange={this.onChange}
 										error={errors.password}
 									/>
@@ -96,14 +95,13 @@ class Register extends Component {
 										placeholder='Confirm Password'
 										name='password2'
 										type='password'
-										value={this.state.password2}
+										value={password2}
 										onChange={this.onChange}
 										error={errors.password2}
 									/>
 
-									<input type="submit"
-									       className="btn btn-info btn-block mt-4"
-									/>
+									<input type="submit" className="btn btn-info btn-block mt-4" />
+
 								</form>
 
 							</div>
@@ -117,8 +115,8 @@ class Register extends Component {
 
 Register.propTypes = {
 	registerUser: PropTypes.func.isRequired,
-	auth: PropTypes.object.isRequired,
-	errors: PropTypes.object.isRequired
+	auth: PropTypes.shape({isAuthenticated: PropTypes.bool}).isRequired,
+	errors: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 const mapStateToProps = (state) => ({

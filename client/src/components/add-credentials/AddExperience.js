@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
-import { defaultMemoize, createSelectorCreator } from 'reselect';
 import { isEqual } from 'lodash';
+import { defaultMemoize, createSelectorCreator } from 'reselect';
 
 import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';

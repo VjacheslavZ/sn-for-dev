@@ -5,8 +5,11 @@
   "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "eslint-plugin-react-hooks": "^1.6.1",
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.15",
     "moment": "^2.22.2",
+    "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
@@ -22,7 +25,8 @@
     "start": "set PORT=3006 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext=js --ext=jsx ."
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {

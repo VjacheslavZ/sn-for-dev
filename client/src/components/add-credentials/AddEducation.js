@@ -37,32 +37,39 @@ class AddEducation extends Component {
 	onSubmit(e) {
 		e.preventDefault();
 
+		const {school, degree, fieldofstudy, from, to, current, description} = this.state;
+		const {addEducation: addEducationProp, history} = this.props;
+
 		const eduData = {
-			school: this.state.school,
-			degree: this.state.degree,
-			fieldofstudy: this.state.fieldofstudy,
-			from: this.state.from,
-			to: this.state.to,
-			current: this.state.current,
-			description: this.state.description,
+			school,
+			degree,
+			fieldofstudy,
+			from,
+			to,
+			current,
+			description,
 		};
 
-		this.props.addEducation(eduData, this.props.history)
+		addEducationProp(eduData, history)
 	}
 
 	onChange(e) {
 		this.setState({ [e.target.name]: e.target.value })
 	}
 
-	onCheck(e) {
+	onCheck() {
+		const {disabled, current} = this.state;
 		this.setState({
-			disabled: !this.state.disabled,
-			current: !this.state.current
+			disabled: !disabled,
+			current: !current
 		});
 	}
 
 	render() {
-		const { errors } = this.state;
+		const {
+			errors, school, degree, fieldofstudy,
+			from, to, disabled, current, description
+		} = this.state;
 
 		return (
 			<div className='add-education'>
@@ -82,7 +89,7 @@ class AddEducation extends Component {
 								<TextFieldCroup
 									placeholder='* School'
 									name='school'
-									value={this.state.school}
+									value={school}
 									onChange={this.onChange}
 									error={errors.school}
 								/>
@@ -90,7 +97,7 @@ class AddEducation extends Component {
 								<TextFieldCroup
 									placeholder='* Degree or Certification'
 									name='degree'
-									value={this.state.degree}
+									value={degree}
 									onChange={this.onChange}
 									error={errors.degree}
 								/>
@@ -98,7 +105,7 @@ class AddEducation extends Component {
 								<TextFieldCroup
 									placeholder='* Field of Study'
 									name='fieldofstudy'
-									value={this.state.fieldofstudy}
+									value={fieldofstudy}
 									onChange={this.onChange}
 									error={errors.fieldofstudy}
 								/>
@@ -107,7 +114,7 @@ class AddEducation extends Component {
 								<TextFieldCroup
 									type='date'
 									name='from'
-									value={this.state.from}
+									value={from}
 									onChange={this.onChange}
 									error={errors.from}
 								/>
@@ -116,33 +123,34 @@ class AddEducation extends Component {
 								<TextFieldCroup
 									type='date'
 									name='to'
-									value={this.state.to}
+									value={to}
 									onChange={this.onChange}
 									error={errors.to}
-									disabled={this.state.disabled ? 'disabled' : ''}
+									disabled={disabled ? 'disabled' : ''}
 								/>
 
 								<div className="for-check mb-4">
-									<input
-										type="checkbox"
-										className='form-check-input'
-										name='current'
-										value={this.state.current}
-										checked={this.state.current}
-										onChange={this.onCheck}
-										id='current'
-									/>
+									{/* eslint-disable-next-line jsx-a11y/label-has-associated-control,jsx-a11y/label-has-for */}
 									<label
 										htmlFor='current'
 										className='form-check-label'>
 										Current Job
 									</label>
+									<input
+										type="checkbox"
+										className='form-check-input'
+										name='current'
+										value={current}
+										checked={current}
+										onChange={this.onCheck}
+										id='current'
+									/>
 								</div>
 
 								<TextAreaFieldCroup
 									placeholder='Program description'
 									name='description'
-									value={this.state.description}
+									value={description}
 									onChange={this.onChange}
 									error={errors.description}
 									info="Tell us about the program that you were in"
@@ -164,8 +172,8 @@ class AddEducation extends Component {
 
 AddEducation.propTypes = {
 	addEducation: PropTypes.func.isRequired,
-	profile: PropTypes.object.isRequired,
-	errors: PropTypes.object.isRequired,
+	// profile: PropTypes.object.isRequired,
+	errors: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 const MapStateToProps = state => ({

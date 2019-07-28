@@ -109,7 +109,7 @@ class CreateProfile extends Component {
 	}
 
 	render() {
-		const {errors, displaySocialInputs} = this.state;
+		const { errors, displaySocialInputs, twitter } = this.state;
 
 		let socialInputs;
 		if(displaySocialInputs) {
@@ -119,7 +119,7 @@ class CreateProfile extends Component {
 						placeholder='Twiiter Profile URL'
 						name='twitter'
 						icon='fab fa-twitter'
-						value={this.state.twitter}
+						value={twitter}
 						onChange={this.onChange}
 						error={errors.twitter}
 					/>
