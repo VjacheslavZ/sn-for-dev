@@ -23,20 +23,21 @@ class PostItem extends Component {
 
 		if(likes.filter(like => like.user === auth.user.id).length > 0) {
 			return true
-		} else {
-			return false;
 		}
+
+		return false;
+
 	}
 
 	render() {
-		const { post, auth, showActions } = this.props;
+		const { post, auth, showActions = true } = this.props;
 
 		return (
 			<div className="card card-body mb-3">
 				<div className="row">
 					<div className="col-md-2">
+						{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
 						<a href="#">
-							{console.log(this.props)}
 							<img className="rounded-circle d-none d-md-block"
 							     src={auth.user.avatar}
 							     alt=""/>
@@ -77,9 +78,6 @@ class PostItem extends Component {
 		);
 	}
 }
-PostItem.defaultProps = {
-	showActions: true
-};
 
 PostItem.propTypes = {
 	deletePost: PropTypes.func.isRequired,

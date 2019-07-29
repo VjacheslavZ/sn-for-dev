@@ -51,8 +51,6 @@ class Register extends Component {
 	render() {
 		const { errors, name, email, password, password2 } = this.state;
 
-		console.log(this.props)
-
 		return (
 			<div>
 				<div className="register">

@@ -25,6 +25,7 @@ class Navbar extends Component {
 					<Link className="nav-link" to="/dashboard">Dashboard</Link>
 				</li>
 				<li className="nav-item">
+					{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
 					<a
 						href=""
 						onClick={this.onLogoutClick.bind(this)}
@@ -60,7 +61,7 @@ class Navbar extends Component {
 						<Link className="navbar-brand" to="/">DevConnector</Link>
 						<button className="navbar-toggler" type="button" data-toggle="collapse"
 						        data-target="#mobile-nav">
-							<span className="navbar-toggler-icon"></span>
+							<span className="navbar-toggler-icon" />
 						</button>
 
 						<div className="collapse navbar-collapse" id="mobile-nav">

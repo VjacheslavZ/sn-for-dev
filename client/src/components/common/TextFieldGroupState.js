@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from "classnames";
 
 
 class TextFieldCroupState extends Component {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			value: ''
-		};
 
 		this.onChange = this.onChange.bind(this);
 	}

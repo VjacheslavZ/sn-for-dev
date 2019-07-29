@@ -8,7 +8,6 @@ const InputCroup = ({
 		value,
 		error,
 		icon,
-		type,
 		onChange,
 	}) => {
 	return (
@@ -38,12 +37,7 @@ InputCroup.propTypes = {
 	value: PropTypes.string.isRequired,
 	icon: PropTypes.string,
 	error: PropTypes.string,
-	type: PropTypes.string.isRequired,
 	onChange: PropTypes.func.isRequired,
-};
-
-InputCroup.defaultProps = {
-	type: 'text'
 };
 
 export default InputCroup;

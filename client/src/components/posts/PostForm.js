@@ -11,17 +11,10 @@ class PostForm extends Component {
 
 		this.state = {
 			text: '',
-			errors: {}
 		};
 
 		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
-	}
-
-	componentWillReceiveProps(newProps) {
-		if(newProps.errors){
-			this.setState({ errors: newProps.errors })
-		}
 	}
 
 	onSubmit(e) {
@@ -42,7 +35,7 @@ class PostForm extends Component {
 	}
 
 	render() {
-		const { errors }= this.state;
+		const { errors }= this.props;
 
 		return (
 			<div className="post-form mb-3">
@@ -73,12 +66,10 @@ class PostForm extends Component {
 
 PostForm.propTypes = {
 	addPost: PropTypes.func.isRequired,
-	auth: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
-	auth: state.auth,
 	errors: state.errors,
 });
 

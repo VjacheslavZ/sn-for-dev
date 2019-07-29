@@ -121,7 +121,7 @@ class CreateProfile extends Component {
 				</div>
 			)
 		}
-		//Select options for status
+		// Select options for status
 		const options = [
 			{label: 'Select Professional Status', value: 0},
 			{label: 'Developer', value: 'Developer'},
@@ -141,7 +141,7 @@ class CreateProfile extends Component {
 						<div className="col-md-8 m-auto">
 							<h1 className="display-4 text-center">Create your profile</h1>
 							<p className="lead text-center">
-								Let's get some information to make your profile stand out
+								Let{'\''}s get some information to make your profile stand out
 							</p>
 							<small className="d-block pb-3">* = required fields</small>
 
@@ -244,7 +244,6 @@ class CreateProfile extends Component {
 }
 
 CreateProfile.propTypes = {
-	profile: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired,
 };
 

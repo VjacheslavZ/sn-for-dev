@@ -1,13 +1,13 @@
 const express = require('express');
+
 const router = express.Router();
-const mongoose = require('mongoose');
 const passport = require('passport');
 
-//post model
+// post model
 const Post = require('../../models/Post');
-//Profile model
+// Profile model
 const Profile = require('../../models/Profile');
-//Validation post
+// Validation post
 const validatePostInput = require('../../validation/post');
 
 // @route GET api/posts/test
@@ -43,9 +43,9 @@ router.get('/:id', (req, res) => {
 // @access Private
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const { errors, isValid } = validatePostInput(req.body);
-	//Check validation
+	// Check validation
 	if(!isValid) {
-		//If any errors, send 400 with errors object
+		// If any errors, send 400 with errors object
 		return res.status(400).json(errors);
 	}
 
@@ -96,7 +96,7 @@ router.post('/like/:id', passport.authenticate('jwt', { session: false }), (req,
 						return res.status(400).json({ alreadyLiked: 'User already liked this post' })
 					}
 
-					//Add user id to likes array
+					// Add user id to likes array
 					post.likes.unshift({ user: req.user.id });
 					post.save().then(post => res.json(post))
 				})
@@ -121,15 +121,15 @@ router.post(
 							.json({ notliked: 'You have not yet liked this post' })
 					}
 
-					//Get remove index
+					// Get remove index
 					const  removeIndex = post.likes
 						.map(item => item.user.toString())
 						.indexOf(req.user.id);
 
-					//Splice out of array
+					// Splice out of array
 					post.likes.splice(removeIndex, 1);
 
-					//Save
+					// Save
 					post.save().then(post => res.json(post));
 				})
 				.catch(err => res.status(404).json({ postnotfound: 'No post found'}));
@@ -179,16 +179,16 @@ router.delete(
 	(req, res) => {
 	Post.findById(req.params.id)
 		.then(post => {
-			//Check to se if the comment exists
+			// Check to se if the comment exists
 			if(post.comment.filter(comment => comment._id.toString() === req.params.comment_id).length === 0) {
 				return res.status(404).json({ comment: 'Comment does not exists' })
 			}
 
-			//Get remove index
+			// Get remove index
 			const removeindex = post.comment
 				.map(item => item._id.toString())
 				.indexOf(req.params.comment_id);
-			//Splice comment form array
+			// Splice comment form array
 			post.comment.splice(removeindex, 1);
 			post.save().then(post => res.json(post))
 		})

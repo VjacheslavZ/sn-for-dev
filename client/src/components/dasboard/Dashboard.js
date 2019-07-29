@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+
 import { getCurrentProfile, deleteAccount } from '../../actions/profileActions';
 import Spinner from '../common/Spiiner';
-import { Link } from 'react-router-dom'
 import ProfileActions from './ProfileActions';
 import Experience from './Experience';
 import Education from './Education';
@@ -13,7 +14,7 @@ class Dashboard extends Component {
 		this.props.getCurrentProfile();
 	}
 
-	onDeleteClick(e) {
+	onDeleteClick() {
 		this.props.deleteAccount();
 	}
 
@@ -26,8 +27,8 @@ class Dashboard extends Component {
 		if(profile === null || loading) {
 			dashboardContent = <Spinner />
 		} else {
-			//Check if logged user has profile data
-			if(Object.keys(profile).length > 0) {
+			// Check if logged user has profile data
+			if (Object.keys(profile).length > 0) {
 				dashboardContent = (
 					<div>
 						<p className="lead text-muted">
@@ -38,11 +39,11 @@ class Dashboard extends Component {
 						<Education education={profile.education}/>
 
 						<div style={{marginBottom: '60px '}}> </div>
-						<button onClick={this.onDeleteClick.bind(this)} className='btn btn-danger'>Delete my account</button>
+						<button type="button" onClick={this.onDeleteClick.bind(this)} className='btn btn-danger'>Delete my account</button>
 					</div>
 				)
 			} else {
-				//User is logged but has no profile
+				// User is logged but has no profile
 				dashboardContent = (
 					<div>
 						<p className="lead text-muted">

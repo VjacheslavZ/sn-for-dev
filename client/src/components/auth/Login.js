@@ -19,10 +19,6 @@ class Login extends Component {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
-	onChange(e) {
-		this.setState({[e.target.name]: e.target.value})
-	};
-	//render after mount component
 	componentDidMount() {
 		if(this.props.auth.isAuthenticated) {
 			this.props.history.push('/dashboard');
@@ -39,6 +35,10 @@ class Login extends Component {
 			})
 		}
 	}
+
+	onChange(e) {
+		this.setState({[e.target.name]: e.target.value})
+	};
 
 	onSubmit(e) {
 		e.preventDefault();

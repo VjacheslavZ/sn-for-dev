@@ -32,8 +32,6 @@ class ProfileCreds extends Component {
 				<p>
 					<strong>Degree:</strong> {edu.degree}
 				</p>
-				<p>
-				</p>
 					<strong>Field of study:</strong> {edu.fieldofstudy}
 				<p>
 					{edu.description === '' ? null : (<span><strong>Description: </strong>{edu.description}</span>)}

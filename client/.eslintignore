@@ -1,1 +1,7 @@
-./App.test.js
+/src/App.test.js
+/src/registerServiceWorker.js
+../routes
+../models
+../config
+../validation
+../server.js

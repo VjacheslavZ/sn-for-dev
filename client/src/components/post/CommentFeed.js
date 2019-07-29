@@ -4,7 +4,6 @@ import CommentItem from './CommentItem';
 
 class CommentFeed extends Component {
 	render() {
-		console.log(this.props)
 		const { comments, postId } = this.props;
 
 		return comments.map(comment => (

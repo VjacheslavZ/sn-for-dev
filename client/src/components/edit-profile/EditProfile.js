@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import TextFieldCroup from '../common/TextFieldGroup';
 import SelectListCroup from '../common/SelectListGroup';
@@ -47,8 +46,8 @@ class CreateProfile extends Component {
 		}
 
 		if(nextProps.profile.profile) {
-			const profile = nextProps.profile.profile;
-			//Bring skills array back to CSV
+			const { profile } = nextProps.profile;
+			// Bring skills array back to CSV
 			const skillsCSV = profile.skills.join(',');
 			// If profile field doesnt exist, make empty string
 			profile.company = !isEmpty(profile.company) ? profile.company : '';
@@ -63,7 +62,7 @@ class CreateProfile extends Component {
 			profile.youtube = !isEmpty(profile.social.youtube) ? profile.social.youtube : '';
 			profile.instagram = !isEmpty(profile.social.instagram) ? profile.social.instagram : '';
 
-			//Set component fields state
+			// Set component fields state
 			this.setState({
 				handle: profile.handle,
 				company: profile.company,
@@ -162,7 +161,7 @@ class CreateProfile extends Component {
 				</div>
 			)
 		}
-		//Select options for status
+		// Select options for status
 		const options = [
 			{label: 'Select Professional Status', value: 0},
 			{label: 'Developer', value: 'Developer'},

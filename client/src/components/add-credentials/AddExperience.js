@@ -16,11 +16,6 @@ class AddExperience extends Component {
 		super(props);
 
 		this.state = {
-			company: '',
-			title: '',
-			location: '',
-			from: '',
-			to: '',
 			current: false,
 			description: '',
 			errors: {},
@@ -61,14 +56,15 @@ class AddExperience extends Component {
 	}
 
 	onCheck() {
+		const { disabled, current } = this.state;
 		this.setState({
-			disabled: !this.state.disabled,
-			current: !this.state.current
+			disabled: !disabled,
+			current: !current
 		});
 	}
 
 	render() {
-		const { errors } = this.state;
+		const { errors, disabled, current, description } = this.state;
 
 		return (
 			<div className='add-experience'>
@@ -115,7 +111,7 @@ class AddExperience extends Component {
 									type='date'
 									name='to'
 									error={errors.to}
-									disabled={this.state.disabled ? 'disabled' : ''}
+									disabled={disabled ? 'disabled' : ''}
 								/>
 
 								<div className="for-check mb-4">
@@ -123,12 +119,13 @@ class AddExperience extends Component {
 										type="checkbox"
 										className='form-check-input'
 										name='current'
-										value={this.state.current}
-										checked={this.state.current}
+										value={current}
+										checked={current}
 										onChange={this.onCheck}
 										id='current'
 									/>
 									<label
+										id="current"
 										htmlFor='current'
 										className='form-check-label'>
 										Current Job
@@ -138,7 +135,7 @@ class AddExperience extends Component {
 								<TextAreaFieldCroup
 									placeholder='Job description'
 									name='description'
-									value={this.state.description}
+									value={description}
 									onChange={this.onChange}
 									error={errors.description}
 									info="Tell us about the position"
@@ -159,7 +156,6 @@ class AddExperience extends Component {
 }
 
 AddExperience.propTypes = {
-	profile: PropTypes.object.isRequired,
 	errors: PropTypes.object.isRequired,
 	addExperience: PropTypes.func.isRequired,
 };
