@@ -1,178 +1,170 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import { SET_FORM_DATA, SET_FORM_CHECKBOX } from '../../conststans';
 
 import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';
 import { addEducation } from '../../actions/profileActions';
 
-class AddEducation extends Component {
-	constructor(props) {
-		super(props);
+const dispatchFormReducer = (dispatch, e) => {
+	dispatch({ type: SET_FORM_DATA, payload: {name: e.target.name, value: e.target.value} });
+};
 
-		this.state = {
-			school: '',
-			degree: '',
-			fieldofstudy: '',
-			from: '',
-			to: '',
-			current: false,
-			description: '',
-			errors: {},
-			disabled: false,
-		};
-
-		this.onChange = this.onChange.bind(this);
-		this.onSubmit = this.onSubmit.bind(this);
-		this.onCheck = this.onCheck.bind(this);
+const educationFormReducer = (state, action) => {
+	switch (action.type) {
+		case SET_FORM_DATA:
+			return {
+				...state,
+				[action.payload.name]: action.payload.value
+			};
+		case SET_FORM_CHECKBOX:
+			return  {
+				...state,
+				[action.payload.name]: action.payload.value
+			};
+		default:
+			return {
+				...state
+			}
 	}
+};
 
-	componentWillReceiveProps(nextProps){
-		if(nextProps) {
-			this.setState({ errors: nextProps.errors })
+const AddEducation = (props) => {
+	const [errors, setErrors] = useState(props.errors);
+
+	useEffect(() => {
+		if(Object.keys(props.errors)) {
+			setErrors(props.errors)
 		}
-	}
+	});
 
-	onSubmit(e) {
+	const onSubmit = (e, state) => {
 		e.preventDefault();
 
-		const {school, degree, fieldofstudy, from, to, current, description} = this.state;
-		const {addEducation: addEducationProp, history} = this.props;
+		const {addEducation: addEducationProp, history} = props;
 
-		const eduData = {
-			school,
-			degree,
-			fieldofstudy,
-			from,
-			to,
-			current,
-			description,
-		};
+		addEducationProp(state, history)
+	};
 
-		addEducationProp(eduData, history)
-	}
+	const [state, dispatch] = useReducer(educationFormReducer, {
+		school: '',
+		degree: '',
+		fieldofstudy: '',
+		from: '',
+		to: '',
+		current: false,
+		description: '',
+	});
 
-	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value })
-	}
+	return (
+		<div className='add-education'>
+			<div className="container">
+				<div className="row">
+					<div className="col-md-8 m-auto">
+						<Link to='/dashboard' className='btn btn-light'>
+							Go back
+						</Link>
+						<h1 className='display-4 text-center'>Add Education</h1>
+						<p className='lead text-center'>\
+							Add any school, bootvamp, etc that you have attempted
+						</p>
+						<small className="d-block pb-3">* = required fields</small>
 
-	onCheck() {
-		const {disabled, current} = this.state;
-		this.setState({
-			disabled: !disabled,
-			current: !current
-		});
-	}
+						 <form onSubmit={(e) => onSubmit(e, state)}>
+							<TextFieldCroup
+								placeholder='* School'
+								name='school'
+								value={state.school}
+								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								error={errors.school}
+							/>
 
-	render() {
-		const {
-			errors, school, degree, fieldofstudy,
-			from, to, disabled, current, description
-		} = this.state;
+							<TextFieldCroup
+								placeholder='* Degree or Certification'
+								name='degree'
+								value={state.degree}
+								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								error={errors.degree}
+							/>
 
-		return (
-			<div className='add-education'>
-				<div className="container">
-					<div className="row">
-						<div className="col-md-8 m-auto">
-							<Link to='/dashboard' className='btn btn-light'>
-								Go back
-							</Link>
-							<h1 className='display-4 text-center'>Add Education</h1>
-							<p className='lead text-center'>\
-								Add any school, bootvamp, etc that you have attempted
-							</p>
-							<small className="d-block pb-3">* = required fields</small>
+							<TextFieldCroup
+								placeholder='* Field of Study'
+								name='fieldofstudy'
+								value={state.fieldofstudy}
+								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								error={errors.fieldofstudy}
+							/>
 
-							<form onSubmit={this.onSubmit}>
-								<TextFieldCroup
-									placeholder='* School'
-									name='school'
-									value={school}
-									onChange={this.onChange}
-									error={errors.school}
-								/>
+							<h6>From date</h6>
+							<TextFieldCroup
+								type='date'
+								name='from'
+								value={state.from}
+								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								error={errors.from}
+							/>
 
-								<TextFieldCroup
-									placeholder='* Degree or Certification'
-									name='degree'
-									value={degree}
-									onChange={this.onChange}
-									error={errors.degree}
-								/>
+							<h6>To date</h6>
+							<TextFieldCroup
+								type='date'
+								name='to'
+								value={state.to}
+								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								error={errors.to}
+								disabled={errors.disabled ? 'disabled' : ''}
+							/>
 
-								<TextFieldCroup
-									placeholder='* Field of Study'
-									name='fieldofstudy'
-									value={fieldofstudy}
-									onChange={this.onChange}
-									error={errors.fieldofstudy}
-								/>
-
-								<h6>From date</h6>
-								<TextFieldCroup
-									type='date'
-									name='from'
-									value={from}
-									onChange={this.onChange}
-									error={errors.from}
-								/>
-
-								<h6>To date</h6>
-								<TextFieldCroup
-									type='date'
-									name='to'
-									value={to}
-									onChange={this.onChange}
-									error={errors.to}
-									disabled={disabled ? 'disabled' : ''}
-								/>
-
-								<div className="for-check mb-4">
-									{/* eslint-disable-next-line jsx-a11y/label-has-associated-control,jsx-a11y/label-has-for */}
-									<label
-										htmlFor='current'
-										className='form-check-label'>
-										Current Job
-									</label>
-									<input
-										type="checkbox"
-										className='form-check-input'
-										name='current'
-										value={current}
-										checked={current}
-										onChange={this.onCheck}
-										id='current'
-									/>
-								</div>
-
-								<TextAreaFieldCroup
-									placeholder='Program description'
-									name='description'
-									value={description}
-									onChange={this.onChange}
-									error={errors.description}
-									info="Tell us about the program that you were in"
-								/>
-
+							<div className="for-check mb-4">
+								<label
+									htmlFor='current'
+									className='form-check-label'>
+									Current Job
+								</label>
 								<input
-									type="submit"
-									value="Submit"
-									className='btn btn-info btn-block mt-4'
+									type="checkbox"
+									className='form-check-input'
+									name='current'
+									value={state.current}
+									checked={state.current}
+									onChange={
+										(e) =>
+											dispatch({
+												type: SET_FORM_CHECKBOX,
+												payload: {name: e.target.name, value: e.target.checked}
+											})
+									}
+									id='current'
 								/>
-							</form>
-						</div>
+							</div>
+
+							<TextAreaFieldCroup
+								placeholder='Program description'
+								name='description'
+								value={state.description}
+								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								error={errors.description}
+								info="Tell us about the program that you were in"
+							/>
+
+							<input
+								type="submit"
+								value="Submit"
+								className='btn btn-info btn-block mt-4'
+							/>
+						 </form>
+
 					</div>
 				</div>
 			</div>
-		);
-	}
-}
+		</div>
+	);
+};
 
 AddEducation.propTypes = {
 	addEducation: PropTypes.func.isRequired,
-	// profile: PropTypes.object.isRequired,
 	errors: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
@@ -183,4 +175,4 @@ const MapStateToProps = state => ({
 
 export default connect(MapStateToProps, { addEducation })(
 	withRouter(AddEducation)
-) ;
+);

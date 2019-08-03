@@ -1,0 +1,2 @@
+export const SET_FORM_DATA = 'SET_FORM_DATA';
+export const SET_FORM_CHECKBOX = 'SET_FORM_CHECKBOX';
