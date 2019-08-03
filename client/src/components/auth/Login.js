@@ -1,96 +1,70 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {loginUser} from '../../actions/authActions';
 import TextFieldCroup from '../common/TextFieldGroup'
 
+import useFormData from '../../hooks';
 
-class Login extends Component {
-	constructor() {
-		super();
+const Login = props => {
+	const [errors, setErrors] = useState(props.errors);
 
-		this.state = {
-			email: '',
-			password: '',
-			errors: {},
-		};
-
-		this.onChange = this.onChange.bind(this);
-		this.onSubmit = this.onSubmit.bind(this);
-	}
-
-	componentDidMount() {
-		if(this.props.auth.isAuthenticated) {
-			this.props.history.push('/dashboard');
+	useEffect(() => {
+		if(Object.keys(props.errors)) {
+			setErrors(props.errors)
 		}
-	}
+	});
 
-	componentWillReceiveProps(nextProps) {
-		if(nextProps.auth.isAuthenticated) {
-			this.props.history.push('/dashboard');
+	const [state, dispatchFormReducer] = useFormData({ email: '', password: '' });
+
+	useEffect(() => {
+		if(props.auth.isAuthenticated) {
+			props.history.push('/dashboard');
 		}
-		if(nextProps.errors) {
-			this.setState({
-				errors: nextProps.errors
-			})
-		}
-	}
+	}, [props.auth.isAuthenticated]);
 
-	onChange(e) {
-		this.setState({[e.target.name]: e.target.value})
-	};
-
-	onSubmit(e) {
+	const onSubmit = (e) => {
 		e.preventDefault();
 
-		const userData = {
-			email: this.state.email,
-			password: this.state.password,
-		};
+		props.loginUser(state);
+	};
 
-		this.props.loginUser(userData);
-	}
+	return (
+		<div className="login">
+			<div className="container">
+				<div className="row">
+					<div className="col-md-8 m-auto">
+						<h1 className="display-4 text-center">Log In</h1>
+						<p className="lead text-center">Sign in to your DevConnector account</p>
 
-	render() {
-		const {errors} = this.state;
+						<form onSubmit={onSubmit}>
 
-		return (
-			<div className="login">
-				<div className="container">
-					<div className="row">
-						<div className="col-md-8 m-auto">
-							<h1 className="display-4 text-center">Log In</h1>
-							<p className="lead text-center">Sign in to your DevConnector account</p>
+							<TextFieldCroup
+								placeholder='Email Address'
+								name='email'
+								type="email"
+								value={state.email}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.email}
+							/>
 
-							<form onSubmit={this.onSubmit}>
+							<TextFieldCroup
+								placeholder='Password'
+								name='password'
+								type="password"
+								value={state.password}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.password}
+							/>
 
-								<TextFieldCroup
-									placeholder='Email Address'
-									name='email'
-									type="email"
-									value={this.state.email}
-									onChange={this.onChange}
-									error={errors.email}
-								/>
-
-								<TextFieldCroup
-									placeholder='Password'
-									name='password'
-									type="password"
-									value={this.state.password}
-									onChange={this.onChange}
-									error={errors.password}
-								/>
-
-								<input type="submit" className="btn btn-info btn-block mt-4"/>
-							</form>
-						</div>
+							<input type="submit" className="btn btn-info btn-block mt-4"/>
+						</form>
 					</div>
 				</div>
 			</div>
-		);
-	}
-}
+		</div>
+	);
+};
 
 Login.propTypes = {
 	loginUser: PropTypes.func.isRequired,
@@ -103,4 +77,4 @@ const mapStateToProps = (state) => ({
 	errors: state.errors
 });
 
-export default connect(mapStateToProps, {loginUser})(Login);
+export default connect(mapStateToProps, { loginUser })(Login);

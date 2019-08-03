@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -20,7 +20,7 @@ const AddExperience = (props) => {
 		}
 	});
 
-	const [state, dispatchFormReducer] = useFormData({
+	const [state, dispatchFormReducer ] = useFormData({
 		company: '',
 		title: '',
 		location: '',

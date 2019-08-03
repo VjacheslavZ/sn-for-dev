@@ -1,8 +1,9 @@
 import React from 'react';
-import { SET_FORM_CHECKBOX, SET_FORM_DATA } from '../conststans';
+import { SET_FORM_CHECKBOX, SET_FORM_DATA, SET_FORM_ERRORS } from '../conststans';
 
 const useFormData = (initialData) => {
-	const educationFormReducer = (state, action) => {
+	const formReducer = (state, action) => {
+		console.log(action)
 		switch (action.type) {
 			case SET_FORM_DATA:
 				return {
@@ -14,6 +15,11 @@ const useFormData = (initialData) => {
 					...state,
 					[action.payload.name]: action.payload.value
 				};
+			case SET_FORM_ERRORS:
+				return  {
+					...state,
+					errors: action.payload
+				};
 			default:
 				return {
 					...state
@@ -21,17 +27,20 @@ const useFormData = (initialData) => {
 		}
 	};
 
-	const [state, dispatch] = React.useReducer(educationFormReducer, initialData);
+	const [state, dispatch] = React.useReducer(formReducer, initialData);
 
 	const dispatchFormReducer = (e) => {
 		if (e.target.type === 'checkbox') {
 			dispatch({ type: SET_FORM_CHECKBOX, payload: { name: e.target.name, value: e.target.checked }});
-			return
+			return;
 		}
 
 		dispatch({ type: SET_FORM_DATA, payload: {name: e.target.name, value: e.target.value} });
 	};
-	return [state, dispatchFormReducer]
+
+	const dispatchActionFormReducer = (action)=> dispatch({ type: action.type , payload: action.payload });
+
+	return [state, dispatchFormReducer, dispatchActionFormReducer]
 };
 
 export default useFormData;
