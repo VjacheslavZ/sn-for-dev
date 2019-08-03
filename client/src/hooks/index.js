@@ -1,9 +1,8 @@
 import React from 'react';
 import { SET_FORM_CHECKBOX, SET_FORM_DATA, SET_FORM_ERRORS } from '../conststans';
 
-const useFormData = (initialData) => {
+export const useFormData = (initialData) => {
 	const formReducer = (state, action) => {
-		console.log(action)
 		switch (action.type) {
 			case SET_FORM_DATA:
 				return {
@@ -43,4 +42,4 @@ const useFormData = (initialData) => {
 	return [state, dispatchFormReducer, dispatchActionFormReducer]
 };
 
-export default useFormData;
+

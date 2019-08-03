@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -6,17 +6,14 @@ import PropTypes from 'prop-types';
 import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';
 import { addEducation } from '../../actions/profileActions';
+import { clearErrorsWithDispatch } from '../../actions/postActions';
 
-import useFormData from '../../hooks';
+import { useFormData } from '../../hooks';
 
 const AddEducation = (props) => {
-	const [errors, setErrors] = useState(props.errors);
-
 	useEffect(() => {
-		if(Object.keys(props.errors)) {
-			setErrors(props.errors)
-		}
-	});
+		return () => props.clearErrorsWithDispatch();
+	}, []);
 
 	const [state, dispatchFormReducer] = useFormData({
 		school: '',
@@ -56,7 +53,7 @@ const AddEducation = (props) => {
 								name='school'
 								value={state.school}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.school}
+								error={props.errors.school}
 							/>
 
 							<TextFieldCroup
@@ -64,7 +61,7 @@ const AddEducation = (props) => {
 								name='degree'
 								value={state.degree}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.degree}
+								error={props.errors.degree}
 							/>
 
 							<TextFieldCroup
@@ -72,7 +69,7 @@ const AddEducation = (props) => {
 								name='fieldofstudy'
 								value={state.fieldofstudy}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.fieldofstudy}
+								error={props.errors.fieldofstudy}
 							/>
 
 							<h6>From date</h6>
@@ -81,7 +78,7 @@ const AddEducation = (props) => {
 								name='from'
 								value={state.from}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.from}
+								error={props.errors.from}
 							/>
 
 							<h6>To date</h6>
@@ -90,8 +87,8 @@ const AddEducation = (props) => {
 								name='to'
 								value={state.to}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.to}
-								disabled={errors.disabled ? 'disabled' : ''}
+								error={props.errors.to}
+								disabled={props.errors.disabled ? 'disabled' : ''}
 							/>
 
 							<div className="for-check mb-4">
@@ -116,7 +113,7 @@ const AddEducation = (props) => {
 								name='description'
 								value={state.description}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.description}
+								error={props.errors.description}
 								info="Tell us about the program that you were in"
 							/>
 
@@ -144,6 +141,6 @@ const MapStateToProps = state => ({
 	errors: state.errors,
 });
 
-export default connect(MapStateToProps, { addEducation })(
+export default connect(MapStateToProps, { addEducation, clearErrorsWithDispatch })(
 	withRouter(AddEducation)
 );

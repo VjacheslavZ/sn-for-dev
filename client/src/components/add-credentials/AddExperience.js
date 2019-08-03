@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -9,16 +9,14 @@ import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';
 
 import { addExperience } from '../../actions/profileActions';
-import useFormData from '../../hooks';
+import { clearErrorsWithDispatch } from '../../actions/postActions';
+
+import { useFormData } from '../../hooks';
 
 const AddExperience = (props) => {
-	const [errors, setErrors] = useState(props.errors);
-
 	useEffect(() => {
-		if(Object.keys(props.errors)) {
-			setErrors(props.errors)
-		}
-	});
+		return () => props.clearErrorsWithDispatch();
+	}, []);
 
 	const [state, dispatchFormReducer ] = useFormData({
 		company: '',
@@ -56,7 +54,7 @@ const AddExperience = (props) => {
 								name='company'
 								value={state.company}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.company}
+								error={props.errors.company}
 							/>
 
 							<TextFieldCroup
@@ -64,7 +62,7 @@ const AddExperience = (props) => {
 								name='title'
 								value={state.title}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.title}
+								error={props.errors.title}
 							/>
 
 							<TextFieldCroup
@@ -72,7 +70,7 @@ const AddExperience = (props) => {
 								name='location'
 								value={state.location}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.location}
+								error={props.errors.location}
 							/>
 
 							<h6>From date</h6>
@@ -81,7 +79,7 @@ const AddExperience = (props) => {
 								name='from'
 								value={state.from}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.from}
+								error={props.errors.from}
 							/>
 
 							<h6>To date</h6>
@@ -90,7 +88,7 @@ const AddExperience = (props) => {
 								name='to'
 								value={state.to}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.to}
+								error={props.errors.to}
 								disabled={state.disabled ? 'disabled' : ''}
 							/>
 
@@ -116,7 +114,7 @@ const AddExperience = (props) => {
 								name='description'
 								value={state.description}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.description}
+								error={props.errors.description}
 								info="Tell us about the position"
 							/>
 
@@ -154,4 +152,4 @@ const mapStateToProps = state => {
 };
 
 
-export default connect(mapStateToProps, { addExperience })(withRouter(AddExperience));
+export default connect(mapStateToProps, { addExperience, clearErrorsWithDispatch })(withRouter(AddExperience));

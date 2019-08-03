@@ -23,6 +23,10 @@ export const clearErrors = () => {
 	};
 };
 
+export const clearErrorsWithDispatch = () => dispatch => {
+	dispatch(clearErrors())
+};
+
 // Add post
 export const addPost = postData => dispatch => {
 	dispatch(clearErrors());

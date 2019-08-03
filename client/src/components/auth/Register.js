@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import {withRouter} from 'react-router-dom';
@@ -6,17 +6,9 @@ import {connect} from 'react-redux';
 import { registerUser } from '../../actions/authActions';
 import TextFieldCroup from '../common/TextFieldGroup';
 
-import useFormData from '../../hooks';
+import { useFormData } from '../../hooks';
 
 const Register = props => {
-	const [errors, setErrors] = useState(props.errors);
-
-	useEffect(() => {
-		if(Object.keys(props.errors)) {
-			setErrors(props.errors)
-		}
-	});
-
 	const [state, dispatchFormReducer] = useFormData({
 		name: '',
 		email: '',
@@ -55,7 +47,7 @@ const Register = props => {
 									name='name'
 									value={state.name}
 									onChange={(e) => dispatchFormReducer(e)}
-									error={errors.name}
+									error={props.errors.name}
 								/>
 
 								<TextFieldCroup
@@ -64,7 +56,7 @@ const Register = props => {
 									type='email'
 									value={state.email}
 									onChange={(e) => dispatchFormReducer(e)}
-									error={errors.email}
+									error={props.errors.email}
 									info='This site uses Gravatar so if you want a profile image, use a Gravatar email'
 								/>
 
@@ -74,7 +66,7 @@ const Register = props => {
 									type='password'
 									value={state.password}
 									onChange={(e) => dispatchFormReducer(e)}
-									error={errors.password}
+									error={props.errors.password}
 								/>
 
 								<TextFieldCroup
@@ -83,7 +75,7 @@ const Register = props => {
 									type='password'
 									value={state.password2}
 									onChange={(e) => dispatchFormReducer(e)}
-									error={errors.password2}
+									error={props.errors.password2}
 								/>
 
 								<input type="submit" className="btn btn-info btn-block mt-4" />

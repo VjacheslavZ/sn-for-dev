@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {loginUser} from '../../actions/authActions';
 import TextFieldCroup from '../common/TextFieldGroup'
 
-import useFormData from '../../hooks';
+import { useFormData } from '../../hooks';
 
 const Login = props => {
-	const [errors, setErrors] = useState(props.errors);
-
-	useEffect(() => {
-		if(Object.keys(props.errors)) {
-			setErrors(props.errors)
-		}
-	});
-
 	const [state, dispatchFormReducer] = useFormData({ email: '', password: '' });
 
 	useEffect(() => {
@@ -45,7 +37,7 @@ const Login = props => {
 								type="email"
 								value={state.email}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.email}
+								error={props.errors.email}
 							/>
 
 							<TextFieldCroup
@@ -54,7 +46,7 @@ const Login = props => {
 								type="password"
 								value={state.password}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={errors.password}
+								error={props.errors.password}
 							/>
 
 							<input type="submit" className="btn btn-info btn-block mt-4"/>
