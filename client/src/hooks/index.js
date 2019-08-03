@@ -1,22 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { SET_FORM_CHECKBOX, SET_FORM_DATA } from '../conststans';
 
-function UseExample() {
-	const [count, setCount] = useState(0);
-	useEffect(() => {
-		document.title = `Вы кликнули ${count} раз`;
-		return () => {
-			console.log('unmount')
+const useFormData = (initialData) => {
+	const educationFormReducer = (state, action) => {
+		switch (action.type) {
+			case SET_FORM_DATA:
+				return {
+					...state,
+					[action.payload.name]: action.payload.value
+				};
+			case SET_FORM_CHECKBOX:
+				return  {
+					...state,
+					[action.payload.name]: action.payload.value
+				};
+			default:
+				return {
+					...state
+				}
 		}
-	}, []);
-	console.log('useExample')
-	return (
-		<div>
-			<p>Вы кликнули {count} раз</p>
-			<button type="button" onClick={() => setCount(count + 1)}>
-				Кликни меня
-			</button>
-		</div>
-	);
-}
+	};
 
-export default UseExample;
+	const [state, dispatch] = React.useReducer(educationFormReducer, initialData);
+
+	const dispatchFormReducer = (e) => {
+		if (e.target.type === 'checkbox') {
+			dispatch({ type: SET_FORM_CHECKBOX, payload: { name: e.target.name, value: e.target.checked }});
+			return
+		}
+
+		dispatch({ type: SET_FORM_DATA, payload: {name: e.target.name, value: e.target.value} });
+	};
+	return [state, dispatchFormReducer]
+};
+
+export default useFormData;

@@ -1,36 +1,13 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
-import { SET_FORM_DATA, SET_FORM_CHECKBOX } from '../../conststans';
 
 import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';
 import { addEducation } from '../../actions/profileActions';
 
-const dispatchFormReducer = (dispatch, e) => {
-	dispatch({ type: SET_FORM_DATA, payload: {name: e.target.name, value: e.target.value} });
-};
-
-const educationFormReducer = (state, action) => {
-	switch (action.type) {
-		case SET_FORM_DATA:
-			return {
-				...state,
-				[action.payload.name]: action.payload.value
-			};
-		case SET_FORM_CHECKBOX:
-			return  {
-				...state,
-				[action.payload.name]: action.payload.value
-			};
-		default:
-			return {
-				...state
-			}
-	}
-};
+import useFormData from '../../hooks';
 
 const AddEducation = (props) => {
 	const [errors, setErrors] = useState(props.errors);
@@ -41,15 +18,7 @@ const AddEducation = (props) => {
 		}
 	});
 
-	const onSubmit = (e, state) => {
-		e.preventDefault();
-
-		const {addEducation: addEducationProp, history} = props;
-
-		addEducationProp(state, history)
-	};
-
-	const [state, dispatch] = useReducer(educationFormReducer, {
+	const [state, dispatchFormReducer] = useFormData({
 		school: '',
 		degree: '',
 		fieldofstudy: '',
@@ -58,6 +27,14 @@ const AddEducation = (props) => {
 		current: false,
 		description: '',
 	});
+
+	const onSubmit = (e) => {
+		e.preventDefault();
+
+		const {addEducation: addEducationProp, history} = props;
+
+		addEducationProp(state, history)
+	};
 
 	return (
 		<div className='add-education'>
@@ -78,7 +55,7 @@ const AddEducation = (props) => {
 								placeholder='* School'
 								name='school'
 								value={state.school}
-								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								onChange={(e) => dispatchFormReducer(e)}
 								error={errors.school}
 							/>
 
@@ -86,7 +63,7 @@ const AddEducation = (props) => {
 								placeholder='* Degree or Certification'
 								name='degree'
 								value={state.degree}
-								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								onChange={(e) => dispatchFormReducer(e)}
 								error={errors.degree}
 							/>
 
@@ -94,7 +71,7 @@ const AddEducation = (props) => {
 								placeholder='* Field of Study'
 								name='fieldofstudy'
 								value={state.fieldofstudy}
-								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								onChange={(e) => dispatchFormReducer(e)}
 								error={errors.fieldofstudy}
 							/>
 
@@ -103,7 +80,7 @@ const AddEducation = (props) => {
 								type='date'
 								name='from'
 								value={state.from}
-								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								onChange={(e) => dispatchFormReducer(e)}
 								error={errors.from}
 							/>
 
@@ -112,7 +89,7 @@ const AddEducation = (props) => {
 								type='date'
 								name='to'
 								value={state.to}
-								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								onChange={(e) => dispatchFormReducer(e)}
 								error={errors.to}
 								disabled={errors.disabled ? 'disabled' : ''}
 							/>
@@ -129,13 +106,7 @@ const AddEducation = (props) => {
 									name='current'
 									value={state.current}
 									checked={state.current}
-									onChange={
-										(e) =>
-											dispatch({
-												type: SET_FORM_CHECKBOX,
-												payload: {name: e.target.name, value: e.target.checked}
-											})
-									}
+									onChange={(e) => dispatchFormReducer(e)}
 									id='current'
 								/>
 							</div>
@@ -144,7 +115,7 @@ const AddEducation = (props) => {
 								placeholder='Program description'
 								name='description'
 								value={state.description}
-								onChange={(e) => dispatchFormReducer(dispatch, e)}
+								onChange={(e) => dispatchFormReducer(e)}
 								error={errors.description}
 								info="Tell us about the program that you were in"
 							/>

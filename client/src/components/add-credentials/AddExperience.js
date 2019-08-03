@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,153 +7,131 @@ import { defaultMemoize, createSelectorCreator } from 'reselect';
 
 import  TextFieldCroup  from '../common/TextFieldGroup';
 import  TextAreaFieldCroup  from '../common/TextAreaFieldGroup';
-import  TextFieldCroupState from "../common/TextFieldGroupState";
 
 import { addExperience } from '../../actions/profileActions';
+import useFormData from '../../hooks';
 
-class AddExperience extends Component {
-	constructor(props) {
-		super(props);
+const AddExperience = (props) => {
+	const [errors, setErrors] = useState(props.errors);
 
-		this.state = {
-			current: false,
-			description: '',
-			errors: {},
-			disabled: false,
-		};
-
-		this.onChange = this.onChange.bind(this);
-		this.onSubmit = this.onSubmit.bind(this);
-		this.onCheck = this.onCheck.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps){
-		if(nextProps) {
-			this.setState({ errors: nextProps.errors })
+	useEffect(() => {
+		if(Object.keys(props.errors)) {
+			setErrors(props.errors)
 		}
-	}
+	});
 
-	onSubmit(e) {
+	const [state, dispatchFormReducer] = useFormData({
+		company: '',
+		title: '',
+		location: '',
+		from: '',
+		to: '',
+		current: false,
+		description: '',
+		disabled: false,
+	});
+
+	const onSubmit = (e) => {
 		e.preventDefault();
-		const {
-			to, from, title, company, current, location, description
-		} = e.target;
 
-		const expData = {
-			to: to.value,
-			from: from.value,
-			title: title.value,
-			company: company.value,
-			current: current.value,
-			location: location.value,
-			description: description.value,
-		};
-		this.props.addExperience(expData, this.props.history)
-	}
+		const {addExperience: addExperienceProp, history} = props;
+		addExperienceProp(state, history)
+	};
 
-	onChange(e) {
-		this.setState({ [e.target.name]: e.target.value })
-	}
+	return (
+		<div className='add-experience'>
+			<div className="container">
+				<div className="row">
+					<div className="col-md-8 m-auto">
+						<Link to='/dashboard' className='btn btn-light'>
+							Go back
+						</Link>
+						<h1 className='display-4 text-center'>Add Experience</h1>
+						<p className='lead text-center'>Add any job or position that you have had in the past or current</p>
+						<small className="d-block pb-3">* = required fields</small>
 
-	onCheck() {
-		const { disabled, current } = this.state;
-		this.setState({
-			disabled: !disabled,
-			current: !current
-		});
-	}
+						<form onSubmit={onSubmit}>
+							<TextFieldCroup
+								placeholder='* Company'
+								name='company'
+								value={state.company}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.company}
+							/>
 
-	render() {
-		const { errors, disabled, current, description } = this.state;
+							<TextFieldCroup
+								placeholder='* Job title'
+								name='title'
+								value={state.title}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.title}
+							/>
 
-		return (
-			<div className='add-experience'>
-				<div className="container">
-					<div className="row">
-						<div className="col-md-8 m-auto">
-							<Link to='/dashboard' className='btn btn-light'>Go back</Link>
+							<TextFieldCroup
+								placeholder='Location'
+								name='location'
+								value={state.location}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.location}
+							/>
 
-							<h1 className='display-4 text-center'>Add Experience</h1>
-							<p className='lead text-center'>Add any job or position that you have had in the past or current</p>
-							<small className="d-block pb-3">* = required fields</small>
+							<h6>From date</h6>
+							<TextFieldCroup
+								type='date'
+								name='from'
+								value={state.from}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.from}
+							/>
 
-							<form onSubmit={this.onSubmit}>
-								<TextFieldCroupState
-									type='text'
-									placeholder='* Company'
-									name='company'
-									error={errors.company}
-								/>
+							<h6>To date</h6>
+							<TextFieldCroup
+								type='date'
+								name='to'
+								value={state.to}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.to}
+								disabled={state.disabled ? 'disabled' : ''}
+							/>
 
-								<TextFieldCroupState
-									type='text'
-									placeholder='* Job title'
-									name='title'
-									error={errors.title}
-								/>
-
-								<TextFieldCroupState
-									type='text'
-									placeholder='Location'
-									name='location'
-									error={errors.location}
-								/>
-
-								<h6>From date</h6>
-								<TextFieldCroupState
-									type='date'
-									name='from'
-									error={errors.from}
-								/>
-
-								<h6>To date</h6>
-								<TextFieldCroup
-									type='date'
-									name='to'
-									error={errors.to}
-									disabled={disabled ? 'disabled' : ''}
-								/>
-
-								<div className="for-check mb-4">
-									<input
-										type="checkbox"
-										className='form-check-input'
-										name='current'
-										value={current}
-										checked={current}
-										onChange={this.onCheck}
-										id='current'
-									/>
-									<label
-										id="current"
-										htmlFor='current'
-										className='form-check-label'>
-										Current Job
-									</label>
-								</div>
-
-								<TextAreaFieldCroup
-									placeholder='Job description'
-									name='description'
-									value={description}
-									onChange={this.onChange}
-									error={errors.description}
-									info="Tell us about the position"
-								/>
-
+							<div className="for-check mb-4">
 								<input
-									type="submit"
-									value="Submit"
-									className='btn btn-info btn-block mt-4'
+									type="checkbox"
+									className='form-check-input'
+									name='current'
+									value={state.current}
+									checked={state.current}
+									onChange={(e) => dispatchFormReducer(e)}
+									id='current'
 								/>
-							</form>
-						</div>
+								<label
+									htmlFor='current'
+									className='form-check-label'>
+									Current Job
+								</label>
+							</div>
+
+							<TextAreaFieldCroup
+								placeholder='Job description'
+								name='description'
+								value={state.description}
+								onChange={(e) => dispatchFormReducer(e)}
+								error={errors.description}
+								info="Tell us about the position"
+							/>
+
+							<input
+								type="submit"
+								value="Submit"
+								className='btn btn-info btn-block mt-4'
+							/>
+						</form>
 					</div>
 				</div>
 			</div>
-		);
-	}
-}
+		</div>
+	)
+};
 
 AddExperience.propTypes = {
 	errors: PropTypes.object.isRequired,
@@ -162,14 +140,11 @@ AddExperience.propTypes = {
 
 const getErrors = (state) => state.errors;
 
-const createDeepEqualSelector = createSelectorCreator(
-	defaultMemoize,
-	isEqual
-);
+const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual);
 
 const getErrorsSelector = createDeepEqualSelector(
 	getErrors,
-	(errors) => errors
+	errors => errors
 );
 
 const mapStateToProps = state => {
@@ -179,6 +154,4 @@ const mapStateToProps = state => {
 };
 
 
-export default connect(mapStateToProps, { addExperience })(
-	withRouter(AddExperience)
-);
+export default connect(mapStateToProps, { addExperience })(withRouter(AddExperience));
