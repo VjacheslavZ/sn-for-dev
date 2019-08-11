@@ -1,19 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
 import {loginUser} from '../../actions/authActions';
 import TextFieldCroup from '../common/TextFieldGroup'
-
 import { useFormData } from '../../hooks';
+import { ErrorContext } from "../../contexts/ErrorContextProvider";
 
 const Login = props => {
 	const [state, dispatchFormReducer] = useFormData({ email: '', password: '' });
+  const errors = useContext(ErrorContext);
+  const { auth, history } = props;
 
 	useEffect(() => {
-		if(props.auth.isAuthenticated) {
-			props.history.push('/dashboard');
+	  console.log('ssss')
+		if(auth.isAuthenticated) {
+			history.push('/dashboard');
 		}
-	}, [props.auth.isAuthenticated]);
+	}, [ auth.isAuthenticated ]);
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -37,7 +42,7 @@ const Login = props => {
 								type="email"
 								value={state.email}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={props.errors.email}
+								error={errors.email}
 							/>
 
 							<TextFieldCroup
@@ -46,7 +51,7 @@ const Login = props => {
 								type="password"
 								value={state.password}
 								onChange={(e) => dispatchFormReducer(e)}
-								error={props.errors.password}
+								error={errors.password}
 							/>
 
 							<input type="submit" className="btn btn-info btn-block mt-4"/>
@@ -61,12 +66,10 @@ const Login = props => {
 Login.propTypes = {
 	loginUser: PropTypes.func.isRequired,
 	auth: PropTypes.object.isRequired,
-	errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
 	auth: state.auth,
-	errors: state.errors
 });
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default withRouter(connect(mapStateToProps, { loginUser })(Login));

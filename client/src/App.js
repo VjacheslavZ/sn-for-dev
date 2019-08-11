@@ -1,6 +1,6 @@
 import React from 'react';
-import {Provider} from 'react-redux'
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { Provider } from 'react-redux'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import jwtDecode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -29,6 +29,10 @@ import Post from './components/post/Post';
 import NotFound from './components/not-found/NotFound';
 
 import Hooks from './components/hooks/hooks'
+
+/* SandBox components */
+import ContextSandBox from "./components/sandBox/context";
+import ErrorContextProvider from "./contexts/ErrorContextProvider";
 
 // check token
 if(localStorage.jwtToken) {
@@ -59,7 +63,7 @@ const App = () => {
 
                     <Route exact path='/' component={Landing}/>
 
-                    <div className="container">
+                    <ErrorContextProvider>
                         <Route exact path='/register' component={Register}/>
                         <Route exact path='/login' component={Login}/>
                         <Route exact path='/profiles' component={Profiles}/>
@@ -88,13 +92,17 @@ const App = () => {
                             <PrivateRoute exact path='/post/:id' component={Post}/>
                         </Switch>
 
+                        <Switch>
+                          <PrivateRoute exact path='/sandbox/context' component={ContextSandBox}/>
+                        </Switch>
+
                         <Route exact path='/not-found' component={NotFound}/>
-                    </div>
+                    </ErrorContextProvider>
                     <Footer />
                 </div>
             </Router>
         </Provider>
     );
-}
+};
 
 export default App;
