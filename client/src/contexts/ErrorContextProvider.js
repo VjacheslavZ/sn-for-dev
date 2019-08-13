@@ -1,21 +1,16 @@
-import React from "react";
-import { connect } from 'react-redux';
+import React, { createContext } from "react";
+import { useSelector } from 'react-redux';
 
-export const ErrorContext = React.createContext();
+export const ErrorContext = createContext();
 
-class ErrorContextProvider extends React.Component {
-  render() {
-    const { errors } = this.props;
-    return (
-      <ErrorContext.Provider value={errors}>
-        {this.props.children}
-      </ErrorContext.Provider>
-    )
-  }
-}
+const ErrorContextProvider = props => {
+  const errors = useSelector(state => state.errors);
 
-const mapStateToProps = (state) => ({
-  errors: state.errors
-});
+  return (
+    <ErrorContext.Provider value={errors}>
+      {props.children}
+    </ErrorContext.Provider>
+  )
+};
 
-export default connect(mapStateToProps)(ErrorContextProvider);
+export default ErrorContextProvider;

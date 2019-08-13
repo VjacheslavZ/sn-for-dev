@@ -1,6 +1,6 @@
 import React from 'react';
-import { Provider } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {Provider} from 'react-redux'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 import jwtDecode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -33,76 +33,79 @@ import Hooks from './components/hooks/hooks'
 /* SandBox components */
 import ContextSandBox from "./components/sandBox/context";
 import ErrorContextProvider from "./contexts/ErrorContextProvider";
+import AuthContextProvider from './contexts/AuthContextProvider';
 
 // check token
-if(localStorage.jwtToken) {
-    // set auth token header auth
-    setAuthToken(localStorage.jwtToken);
-    // Decode token and get user info and exp
-    const decoded = jwtDecode(localStorage.jwtToken);
-    // Set user and isAuth
-    store.dispatch(setCurrentUser(decoded));
-    // Check for expire token
-    const currentTime = Date.now() / 1000;
-    if(decoded.exp < currentTime) {
-        // Logout user
-        store.dispatch(logoutUser());
-        // Clear current profile
-        // store.dispatch(clearCurrentProfile());
-        // Redirect user
-        window.location.href = '/login'
-    }
+if (localStorage.jwtToken) {
+  // set auth token header auth
+  setAuthToken(localStorage.jwtToken);
+  // Decode token and get user info and exp
+  const decoded = jwtDecode(localStorage.jwtToken);
+  // Set user and isAuth
+  store.dispatch(setCurrentUser(decoded));
+  // Check for expire token
+  const currentTime = Date.now() / 1000;
+  if (decoded.exp < currentTime) {
+    // Logout user
+    store.dispatch(logoutUser());
+    // Clear current profile
+    // store.dispatch(clearCurrentProfile());
+    // Redirect user
+    window.location.href = '/login'
+  }
 }
 
 const App = () => {
-    return (
-        <Provider store={store}>
-            <Router>
-                <div className="App">
-                    <Navbar />
+  return (
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Navbar/>
 
-                    <Route exact path='/' component={Landing}/>
+          <Route exact path='/' component={Landing}/>
 
-                    <ErrorContextProvider>
-                        <Route exact path='/register' component={Register}/>
-                        <Route exact path='/login' component={Login}/>
-                        <Route exact path='/profiles' component={Profiles}/>
-                        <Route exact path='/profile/:handle' component={Profile}/>
-                        <Route exact path='/hooks' component={Hooks}/>
+          <ErrorContextProvider>
+            <AuthContextProvider>
+              <Route exact path='/register' component={Register}/>
+              <Route exact path='/login' component={Login}/>
+              <Route exact path='/profiles' component={Profiles}/>
+              <Route exact path='/profile/:handle' component={Profile}/>
+              <Route exact path='/hooks' component={Hooks}/>
 
-                        <Switch>
-                            <PrivateRoute exact path='/dashboard' component={Dashboard}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path='/create-profile' component={CreateProfile}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path='/edit-profile' component={EditProfile}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path='/add-experience' component={AddExperience}/>
-                        </Switch>
-                        <Switch>
-                          <PrivateRoute exact path='/add-education' component={AddEducation}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path='/feed' component={Posts}/>
-                        </Switch>
-                        <Switch>
-                            <PrivateRoute exact path='/post/:id' component={Post}/>
-                        </Switch>
+              <Switch>
+                <PrivateRoute exact path='/dashboard' component={Dashboard}/>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path='/create-profile' component={CreateProfile}/>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path='/edit-profile' component={EditProfile}/>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path='/add-experience' component={AddExperience}/>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path='/add-education' component={AddEducation}/>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path='/feed' component={Posts}/>
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path='/post/:id' component={Post}/>
+              </Switch>
 
-                        <Switch>
-                          <PrivateRoute exact path='/sandbox/context' component={ContextSandBox}/>
-                        </Switch>
+              <Switch>
+                <PrivateRoute exact path='/sandbox/context' component={ContextSandBox}/>
+              </Switch>
 
-                        <Route exact path='/not-found' component={NotFound}/>
-                    </ErrorContextProvider>
-                    <Footer />
-                </div>
-            </Router>
-        </Provider>
-    );
+              <Route exact path='/not-found' component={NotFound}/>
+            </AuthContextProvider>
+          </ErrorContextProvider>
+          <Footer/>
+        </div>
+      </Router>
+    </Provider>
+  );
 };
 
 export default App;
