@@ -1,52 +1,44 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 
-import {ThemeContext, themes} from './theme-context';
-import ThemedButton from './themed-button';
-import ThemeTogglerButton from './theme-toggler-button';
 
-function Toolbar(props) {
-  return (
-    <ThemedButton onClick={props.changeTheme}>
-      Change Theme
-    </ThemedButton>
-  );
-}
+const randomColour = () => '#'+(Math.random()*0xFFFFFF<<0).toString(16);
 
-class ContextSandBox extends React.Component {
-  constructor(props) {
-    super(props);
+const Button = React.memo((props) =>
+  <button onClick={props.onClick} style={{background: randomColour()}}>
+    {props.children}
+  </button>
+);
 
-    this.toggleTheme = () => {
-      this.setState(state => ({
-        theme:
-          state.theme === themes.dark
-            ? themes.light
-            : themes.dark,
-      }));
-    };
+const functions = new Set();
 
-    this.state = {
-      theme: themes.light,
-      toggleTheme: this.toggleTheme,
-    };
-  }
+const App = () => {
+  const [delta, setDelta] = useState(1);
+  const [c, setC] = useState(0);
 
-  render() {
-    return (
-      <div>
-        <ThemeContext.Provider value={this.state}>
-          <Toolbar changeTheme={this.toggleTheme} />
-          <ThemeTogglerButton/>
-        </ThemeContext.Provider>
-        <div>
-          <ThemedButton>
-            btn 2
-          </ThemedButton>
-        </div>
-      </div>
-    );
-  }
-}
+  const incrementDelta = useCallback(() => setDelta(delta => delta + 1), []);
+  const increment = useCallback(() => setC(c => c + delta), [delta]);
 
-export default ContextSandBox;
+  const incrementBoth = useCallback(() => {
+    incrementDelta();
+    increment();
+  }, [increment, incrementDelta]);
+
+  // Register the functions so we can count them
+  functions.add(incrementDelta);
+  functions.add(increment);
+
+  return (<div>
+    <div> Delta is {delta} </div>
+    <div> Counter is {c} </div>
+    <br/>
+    <div>
+      <Button onClick={incrementDelta}>Increment Delta</Button>
+      <Button onClick={increment}>Increment Counter</Button>
+    </div>
+    <br/>
+    <div> Newly Created Functions: {functions.size - 2} </div>
+  </div>)
+};
+
+export default App;
 

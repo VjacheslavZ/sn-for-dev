@@ -6,12 +6,16 @@ import {withRouter} from 'react-router-dom';
 import {loginUser} from '../../actions/authActions';
 import TextFieldCroup from '../common/TextFieldGroup'
 import {useFormData} from '../../hooks';
+
 import {ErrorContext} from "../../contexts/ErrorContextProvider";
+import {AuthContext} from "../../contexts/AuthContextProvider";
 
 const Login = props => {
-  const [state, dispatchFormReducer] = useFormData({email: '', password: ''});
   const errors = useContext(ErrorContext);
-  const {auth, history} = props;
+  const auth = useContext(AuthContext);
+
+  const [state, dispatchFormReducer] = useFormData({email: '', password: ''});
+  const { history } = props;
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -64,11 +68,6 @@ const Login = props => {
 
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default withRouter(connect(mapStateToProps, {loginUser})(Login));
+export default withRouter(connect(null, {loginUser})(Login));
